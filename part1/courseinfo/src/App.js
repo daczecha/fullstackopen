@@ -1,13 +1,25 @@
+
+function Part(props){
+  return(
+    <p>
+      {props.part} {props.exercise}
+    </p>
+  );
+}
+
 function Header(props){
   return(
     <h1>{props.course}</h1>
   );
 }
 
-
-function Content(){
+function Content(props){
   return(
-    <></>
+    <>
+      <Part  part = {props.parts[0]} exercise = {props.exercises[0]}/>
+      <Part  part = {props.parts[1]} exercise = {props.exercises[1]}/>
+      <Part  part = {props.parts[2]} exercise = {props.exercises[2]}/>
+    </>
   );
 }
 
@@ -30,7 +42,7 @@ function App() {
   return (
     <>
       <Header course={course}/>
-      <Content/>
+      <Content parts = {[part1, part2, part3]} exercises = {[exercises1, exercises2, exercises3]}/>
       <Total total = {exercises1 + exercises2 + exercises3}/>
     </>
   );
