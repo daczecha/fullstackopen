@@ -1,16 +1,22 @@
 import { useState } from "react";
 
-function Statistics({statistics, all, average, positive}){
+function Statistics(props){
   return(
     <>
       <h1>statistics</h1>
-      <p>good {statistics.good}</p>
-      <p>neutral {statistics.neutral}</p>
-      <p>bad {statistics.bad}</p>
+      {props.statistics.good === 0 && props.statistics.neutral === 0 && props.statistics.bad === 0?
+        <p>No feedback</p>:
+        <>
+          <p>good {props.statistics.good}</p>
+          <p>neutral {props.statistics.neutral}</p>
+          <p>bad {props.statistics.bad}</p>
 
-      <p>all {all}</p>
-      <p>average {average}</p>
-      <p>positive {positive}</p></>
+          <p>all {props.all}</p>
+          <p>average {props.average}</p>
+          <p>positive {props.positive}</p>
+        </>
+      }
+      </>
   );
 }
 
