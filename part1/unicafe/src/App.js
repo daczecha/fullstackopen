@@ -1,5 +1,19 @@
 import { useState } from "react";
 
+function Statistics({statistics, all, average, positive}){
+  return(
+    <>
+      <h1>statistics</h1>
+      <p>good {statistics.good}</p>
+      <p>neutral {statistics.neutral}</p>
+      <p>bad {statistics.bad}</p>
+
+      <p>all {all}</p>
+      <p>average {average}</p>
+      <p>positive {positive}</p></>
+  );
+}
+
 function App() {
   const [statistics, setStatistics] = useState(
     {
@@ -51,14 +65,7 @@ function App() {
     <button onClick={()=>{voteNeutral()}}>neutral</button>
     <button onClick={()=>{voteBad()}}>bad</button>
 
-    <h1>statistics</h1>
-    <p>good {statistics.good}</p>
-    <p>neutral {statistics.neutral}</p>
-    <p>bad {statistics.bad}</p>
-
-    <p>all {statisticsAll()}</p>
-    <p>average {statisticsAverage()}</p>
-    <p>positive {statisticsPositive()}</p>
+    <Statistics statistics={statistics} all={statisticsAll()} average={statisticsAverage()} positive={statisticsPositive()}/>
   </>
   );
 }
