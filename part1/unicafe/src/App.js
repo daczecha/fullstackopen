@@ -16,7 +16,6 @@ function App() {
     }
     );
   }
-  
   function voteNeutral(){
     setStatistics({
       ...statistics,
@@ -24,7 +23,6 @@ function App() {
     }
     );
   }
-
   function voteBad(){
     setStatistics({
       ...statistics,
@@ -33,6 +31,19 @@ function App() {
     );
   }
   
+
+  function statisticsAll(){
+    return statistics.good + statistics.neutral + statistics.bad;
+  }
+
+  function statisticsAverage(){
+    return (statistics.good - statistics.bad)/(statistics.good + statistics.neutral + statistics.bad);
+  }
+
+  function statisticsPositive(){
+    return (statistics.good + statistics.neutral)/(statistics.good + statistics.neutral + statistics.bad);
+  }
+
   return (
   <>
     <h1>give feedback</h1>
@@ -44,6 +55,10 @@ function App() {
     <p>good {statistics.good}</p>
     <p>neutral {statistics.neutral}</p>
     <p>bad {statistics.bad}</p>
+
+    <p>all {statisticsAll()}</p>
+    <p>average {statisticsAverage()}</p>
+    <p>positive {statisticsPositive()}</p>
   </>
   );
 }
