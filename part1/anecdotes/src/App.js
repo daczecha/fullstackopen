@@ -11,7 +11,8 @@ function App() {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
   ];
    
-  const [votes, setVotes] = useState([0,0,0,0,0,0,0]); 
+  const [votes, setVotes] = useState([0,0,0,0,0,0,0]);
+  const [topIndex, setTopIndex] = useState(0);
   const [selected, setSelected] = useState(0);
 
   function randomInt(mn,mx){
@@ -24,14 +25,25 @@ function App() {
     let temp = [...votes];
     temp[selected] += 1;
     setVotes(temp);
+
+    if(votes[selected] === Math.max(...votes)){
+      setTopIndex(selected);
+    }
   }
 
   return (
     <div>
+      
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
       <p>has {votes[selected]} votes</p>
       <button onClick={()=>addVote()}>vote</button>
       <button onClick={()=>setSelected(randomInt(0,anecdotes.length))}>next anecdote</button>
+
+
+      <h1>Anecdote with most votes</h1>
+      {anecdotes[topIndex]}
+      <p>has {votes[topIndex]} votes</p>
     </div>
   );
 }
