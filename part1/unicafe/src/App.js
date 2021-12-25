@@ -1,5 +1,18 @@
 import { useState } from "react";
 
+function StatisticLine(props){
+  return(
+    <p>{props.text} {props.value}</p>
+  );
+}
+
+
+function Button(props){
+  return(
+    <button onClick={props.handleClick}>{props.text}</button>
+  );
+}
+
 function Statistics(props){
   return(
     <>
@@ -7,13 +20,13 @@ function Statistics(props){
       {props.statistics.good === 0 && props.statistics.neutral === 0 && props.statistics.bad === 0?
         <p>No feedback</p>:
         <>
-          <p>good {props.statistics.good}</p>
-          <p>neutral {props.statistics.neutral}</p>
-          <p>bad {props.statistics.bad}</p>
-
-          <p>all {props.all}</p>
-          <p>average {props.average}</p>
-          <p>positive {props.positive}</p>
+          <StatisticLine text ='good' value = {props.statistics.good}/>
+          <StatisticLine text ='neutral' value = {props.statistics.neutral}/>
+          <StatisticLine text ='bad' value = {props.statistics.bad}/>
+          
+          <StatisticLine text ='all' value = {props.all}/>
+          <StatisticLine text ='average' value = {props.average}/>
+          <StatisticLine text ='positive' value = {props.positive}/>
         </>
       }
       </>
@@ -67,9 +80,9 @@ function App() {
   return (
   <>
     <h1>give feedback</h1>
-    <button onClick={()=>{voteGood()}}>good</button>
-    <button onClick={()=>{voteNeutral()}}>neutral</button>
-    <button onClick={()=>{voteBad()}}>bad</button>
+    <Button text='good' handleClick={()=>{voteGood()}}/>
+    <Button text='neutral' handleClick={()=>{voteNeutral()}}/>
+    <Button text='bad' handleClick={()=>{voteBad()}}/>
 
     <Statistics statistics={statistics} all={statisticsAll()} average={statisticsAverage()} positive={statisticsPositive()}/>
   </>
