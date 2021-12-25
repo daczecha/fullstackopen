@@ -2,7 +2,14 @@ import { useState } from "react";
 
 function StatisticLine(props){
   return(
-    <p>{props.text} {props.value}</p>
+    <tr>
+      <td>
+        {props.text} 
+      </td>
+      <td>
+        {props.value}
+      </td>
+    </tr>
   );
 }
 
@@ -20,13 +27,17 @@ function Statistics(props){
       {props.statistics.good === 0 && props.statistics.neutral === 0 && props.statistics.bad === 0?
         <p>No feedback</p>:
         <>
-          <StatisticLine text ='good' value = {props.statistics.good}/>
-          <StatisticLine text ='neutral' value = {props.statistics.neutral}/>
-          <StatisticLine text ='bad' value = {props.statistics.bad}/>
-          
-          <StatisticLine text ='all' value = {props.all}/>
-          <StatisticLine text ='average' value = {props.average}/>
-          <StatisticLine text ='positive' value = {props.positive}/>
+          <table>
+            <tbody>
+              <StatisticLine text ='good' value = {props.statistics.good}/>
+              <StatisticLine text ='neutral' value = {props.statistics.neutral}/>
+              <StatisticLine text ='bad' value = {props.statistics.bad}/>
+              
+              <StatisticLine text ='all' value = {props.all}/>
+              <StatisticLine text ='average' value = {props.average}/>
+              <StatisticLine text ='positive' value = {props.positive}/>
+            </tbody>
+          </table>
         </>
       }
       </>
