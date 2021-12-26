@@ -1,4 +1,3 @@
-
 function Part(props){
   return(
     <p>
@@ -25,7 +24,7 @@ function Content(props){
 
 function Total(props){
   return(
-    <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercisess + props.parts[2].exercises}</p>
+    <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
   );
 }
 
