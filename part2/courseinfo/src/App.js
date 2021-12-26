@@ -23,8 +23,10 @@ function Content(props){
 }
 
 function Total(props){
+  let a = [props.parts[0].exercises , props.parts[1].exercises , props.parts[2].exercises]
+  const total = a.reduce(function(a, b) { return a + b; }, 0);
   return(
-    <b>total of {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} exercises</b>
+    <b>total of {total} exercises</b>
   );
 }
 
