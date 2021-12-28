@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Info from "./Info";
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [filter, setFilter] = useState('');
-  const [filtered, setFiltered] = useState([]);
+  const [filtered, setFiltered] = useState({});
+
+  const [info, setInfo] = useState({});
+  const [show, setShow] = useState(false);
   
   function handleFilter(event){
+    setShow(false);
     setFilter(event.target.value);
   }
 
@@ -30,42 +35,48 @@ function App() {
       )
     );
   },[filter]);
+
   
+  
+  function handleShow(cca2){
+    setInfo(
+      countries.filter(
+        (country)=>
+        country.cca2 === cca2
+        )
+        );
+        
+    setShow(true);
+  }
+
   return (
     <>
       find countries <input type="text" value={filter} onChange={handleFilter}/>
       {
+
+        show ? 
+          <Info country={info[0]} key={info[0].cca2}/>
+        :
         filtered.length > 0 && filtered.length<250?
           filtered.length >= 10 ?
             <p>Too many matches, specify another filter</p>
             :
-
             filtered.length === 1 ?
             filtered.map((country)=>{
                 return(
-                <div key={country.cca2}>
-                  <h2>{country.name.common}</h2>
-                  <p>capital {country.capital}</p>
-                  <p>population {country.population}</p>
-
-                  <h3>languages</h3>
-                  <ul>
-                    {
-                      Object.keys(country.languages).map(function(key, index) {
-                        return <li key={country.languages[key]}>{country.languages[key]}</li>
-                      })
-                    }
-                  </ul>
-                  <div style={{fontSize:'180px'}}>
-                    {country.flag}
-                  </div>
-                </div>
+                  <Info country={country} key={country.cca2}/>
                 );
               }
             )
             : 
-            filtered.map((country)=>
-              <p key={country.cca2}>{country.name.common}</p>
+            filtered.map((country)=>{
+              return (
+                <div key={country.cca2}>
+                  <br></br>
+                  {country.name.common} <button onClick={()=>handleShow(country.cca2)}>show</button>
+                </div>
+              );
+            }
             )
           :
           <p>{filter.length ? 'country with that name doesn\'t exist':'search country'}</p>
