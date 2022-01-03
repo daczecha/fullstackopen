@@ -33,25 +33,32 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-
     if (persons.filter(e => e.name === newName).length > 0) {
       alert(`${newName} is already added to phonebook`);
     }else{
       newName && newNumber ?
-      setPersons(persons.concat(
-        {
-          name:newName,
-          number: newNumber,
-          id: persons.length + 1
-        }
-      )
-      ):
-      alert('fill both fields');
+        addPerson()
+        :
+        alert('fill both fields');
     }
-    setNewName('');
-    setNewNumber('');
   }
 
+  const addPerson = () => {
+
+    const newPerson ={
+        name:newName,
+        number: newNumber
+    }
+
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        setPersons(persons.concat(response.data));
+        setNewName('');
+        setNewNumber('');
+      })
+      
+  }
 
   useEffect(()=>{
     axios
