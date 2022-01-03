@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Weather({city}){
-    const [weather, setWeather] = useState();
+    const [weather, setWeather] = useState(undefined);
 
     useEffect(()=>{
         axios
-            .get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${'64dad1960f93ae1e6a0053e74b270eb3'}`)
+            .get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_API_KEY}`)
             .then(response=>setWeather(response.data));
     },[]);
 
@@ -18,10 +18,30 @@ export default function Weather({city}){
     }
 
 
+    function kToC(k) {
+        return (k - 273.15).toFixed();
+    }
+
+
     return(
         <div>
             <h2>Wheather in {city}</h2>
-            <p>{JSON.stringify(weather.wind.speed)}</p>
+            {
+               weather ? 
+                <>
+                    <p>
+                        <b>temperature: </b>
+                        {`${kToC(weather.main.temp)} celsius`}
+                    </p>
+                    <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`} alt="Weather Icon"></img>
+                    <p>
+                        <b>wind: </b>
+                        {`${weather.wind.speed} mph direction ${degToCompass(weather.wind.deg)}`}
+                    </p>
+                </>
+                :
+                <p>loading data...</p>
+            }
         </div>  
     );
 }
