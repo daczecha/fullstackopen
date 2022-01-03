@@ -1,7 +1,4 @@
 import React, { useState,useEffect} from 'react';
-
-import axios from 'axios';
-
 import Numbers from './components/Numbers';
 import New from './components/New';
 import Filter from './components/Filter';
