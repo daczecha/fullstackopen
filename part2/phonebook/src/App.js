@@ -7,6 +7,8 @@ import New from './components/New';
 import Filter from './components/Filter';
 
 
+import personsService from './services/persons';
+
 const App = () => {
   const [persons, setPersons] = useState([
   ]);
@@ -50,8 +52,8 @@ const App = () => {
         number: newNumber
     }
 
-    axios
-      .post('http://localhost:3001/persons', newPerson)
+    personsService
+      .create(newPerson)
       .then(response => {
         setPersons(persons.concat(response.data));
         setNewName('');
@@ -61,8 +63,8 @@ const App = () => {
   }
 
   useEffect(()=>{
-    axios
-      .get("http://localhost:3001/persons")
+    personsService
+      .getAll()
       .then(response => setPersons(response.data))
   },[]);
 
@@ -70,6 +72,7 @@ const App = () => {
     <div>
       <Filter filterWord={filterWord} handleFilterInput={handleFilterInput}/>
       <New 
+
         handleSubmit={handleSubmit}
         newName={newName} 
         handleNameInput={handleNameInput}
