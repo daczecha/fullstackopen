@@ -13,6 +13,11 @@ const remove = id => {
     return axios.delete(`${baseUrl}/${id}`);
 }
 
-const personsService = {getAll, create, remove};
+const replace = (id,newNumber) => {
+    return axios.put(`${baseUrl}/${id}`, newNumber);
+}
+
+
+const personsService = {getAll, create, remove, replace};
 
 export default personsService;

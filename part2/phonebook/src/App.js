@@ -37,7 +37,6 @@ const App = () => {
 
   const handleDelete = (id) =>{
     const person = persons.filter(person=>person.id === id);
-    console.log(person);
 
     if (window.confirm(`Delete ${person[0].name} ?`)) {
       personsService
@@ -64,12 +63,22 @@ const App = () => {
     event.preventDefault();
 
     if (persons.filter(e => e.name === newName).length > 0) {
-      alert(`${newName} is already added to phonebook`);
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+
+        const person = persons.find(n => n.name === newName);
+        const changedPerson = { ...person, number: newNumber };
+        personsService
+          .replace(person.id,changedPerson)
+          .then(response=>
+              setPersons(persons.map(person => person.name !== newName ? person : response.data)));
+        
+      }
     }else{
-      newName && newNumber ?
-        addPerson()
-        :
+      if(newName && newNumber){
+        addPerson();
+      }else{
         alert('fill both fields');
+      }
     }
   }
 
