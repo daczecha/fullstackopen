@@ -1,3 +1,6 @@
+import Weather from "./Weather";
+
+
 export default function Info({country}){
     return(
         <div>
@@ -16,6 +19,7 @@ export default function Info({country}){
             <div style={{fontSize:'180px'}}>
                 {country.flag}
             </div>
+            <Weather city = {country.capital}/>
         </div>
     );
 }

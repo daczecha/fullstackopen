@@ -53,7 +53,6 @@ function App() {
     <>
       find countries <input type="text" value={filter} onChange={handleFilter}/>
       {
-
         show ? 
           <Info country={info[0]} key={info[0].cca2}/>
         :
