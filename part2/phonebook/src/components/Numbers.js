@@ -6,7 +6,11 @@ export default function Numbers(props){
                 props.data.filter((item) => {
                 return item.name.toLowerCase().includes(props.filterWord.toLowerCase());
                 })
-                .map(person=><p key={person.id}>{person.name} {person.number}</p>)
+                .map(person=>
+                    <div key={person.id}>
+                        {person.name} {person.number} <button onClick={()=>{props.handleDelete(person.id)}}>delete</button>
+                    </div>
+                )
             }
         </div>
     );

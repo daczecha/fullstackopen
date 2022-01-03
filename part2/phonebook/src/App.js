@@ -20,30 +20,6 @@ const App = () => {
   const [filterWord, setFilterWord] = useState('');
 
 
-  const handleFilterInput = (event) =>{
-    setFilterWord(event.target.value);
-  }
-
-  const handleNameInput = (event) =>{
-    setNewName(event.target.value);
-  }
-  
-  const handleNumberInput = (event) =>{
-    setNewNumber(event.target.value);
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    if (persons.filter(e => e.name === newName).length > 0) {
-      alert(`${newName} is already added to phonebook`);
-    }else{
-      newName && newNumber ?
-        addPerson()
-        :
-        alert('fill both fields');
-    }
-  }
 
   const addPerson = () => {
 
@@ -60,6 +36,44 @@ const App = () => {
         setNewNumber('');
       })
       
+  }
+
+  const handleDelete = (id) =>{
+    const person = persons.filter(person=>person.id === id);
+    console.log(person);
+
+    if (window.confirm(`Delete ${person[0].name} ?`)) {
+      personsService
+      .remove(id);
+
+      setPersons(persons.filter(person=>person.id !== id));
+    }    
+  }
+
+  const handleFilterInput = (event) =>{
+    setFilterWord(event.target.value);
+  }
+
+  const handleNameInput = (event) =>{
+    setNewName(event.target.value);
+  }
+  
+  const handleNumberInput = (event) =>{
+    setNewNumber(event.target.value);
+  }
+
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (persons.filter(e => e.name === newName).length > 0) {
+      alert(`${newName} is already added to phonebook`);
+    }else{
+      newName && newNumber ?
+        addPerson()
+        :
+        alert('fill both fields');
+    }
   }
 
   useEffect(()=>{
@@ -79,7 +93,7 @@ const App = () => {
         newNumber={newNumber}
         handleNumberInput={handleNumberInput}
       />
-      <Numbers data = {persons} filterWord ={filterWord}/>
+      <Numbers data = {persons} filterWord ={filterWord} handleDelete={handleDelete}/>
     </div>
   )
 }
