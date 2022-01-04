@@ -10,6 +10,11 @@ const App = () => {
   const [persons, setPersons] = useState([
   ]);
 
+  const [added, setAdded] = useState(false);
+  const [error, setError] = useState(false);
+
+  const [addedName, setAddedName] = useState('');
+  const [errorName, setErrorName] = useState('');
 
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
@@ -31,8 +36,14 @@ const App = () => {
         setPersons(persons.concat(response.data));
         setNewName('');
         setNewNumber('');
-      })
-      
+      });
+    
+    setAdded(true);
+    setAddedName(newPerson.name);
+    setTimeout(() => {
+      setAdded(false);
+      setAddedName('');
+    }, 2000);
   }
 
   const handleDelete = (id) =>{
@@ -40,10 +51,19 @@ const App = () => {
 
     if (window.confirm(`Delete ${person[0].name} ?`)) {
       personsService
-      .remove(id);
+      .remove(id)
+      .catch(error=>{
+        setError(true);
+        setErrorName(person[0].name);
+        setTimeout(() => {
+          setError(false);
+          setErrorName('');
+        }, 2000);
+      });
 
       setPersons(persons.filter(person=>person.id !== id));
-    }    
+    }
+    
   }
 
   const handleFilterInput = (event) =>{
@@ -90,9 +110,15 @@ const App = () => {
 
   return (
     <div>
+      <h2>Phonebook</h2>
+      {
+        added ? <p className='add-message'>Added {addedName}</p> : <></>
+      }
+      {
+        error ? <p className='error'>Information of {errorName} has already been removed from server</p> :<></>
+      }
       <Filter filterWord={filterWord} handleFilterInput={handleFilterInput}/>
       <New 
-
         handleSubmit={handleSubmit}
         newName={newName} 
         handleNameInput={handleNameInput}
