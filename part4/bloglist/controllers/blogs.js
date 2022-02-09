@@ -12,7 +12,12 @@ blogsRouter.get('/', async (request, response) => {
 });
 
 blogsRouter.post('/', async (request, response) => {
-  const blog = new Blog(request.body);
+  //if likes is not defined, define it and set it to 0
+  const body = request.body.likes
+    ? request.body
+    : { ...request.body, likes: 0 };
+
+  const blog = new Blog(body);
   const result = await blog.save();
   response.status(201).json(result);
 });

@@ -16,52 +16,70 @@ beforeEach(async () => {
   await Promise.all(promiseArray);
 });
 
-describe('blogs', () => {
-  test('are returned as json', async () => {
-    jest.setTimeout(10000);
-    await api
-      .get('/api/blogs')
-      .expect(200)
-      .expect('Content-Type', /application\/json/);
+test('blogs are returned as json', async () => {
+  jest.setTimeout(10000);
+  await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+});
+
+test('blogs are correct amount', async () => {
+  jest.setTimeout(10000);
+  const response = await api.get('/api/blogs');
+
+  expect(response.body.length).toEqual(2);
+});
+
+test('blogs have identifier property named "id"', async () => {
+  jest.setTimeout(10000);
+  const response = await api.get('/api/blogs');
+
+  response.body.forEach((element) => {
+    expect(element.id).toBeDefined();
   });
+});
 
-  test('are correct amount', async () => {
-    jest.setTimeout(10000);
-    const response = await api.get('/api/blogs');
+test('blogs can be created', async () => {
+  jest.setTimeout(10000);
 
-    expect(response.body.length).toEqual(2);
-  });
+  const payload = {
+    title: 'Why does my back hurt?',
+    author: 'Mama',
+    url: 'url.com',
+    likes: 4129,
+  };
 
-  test('have identifier property named "id"', async () => {
-    jest.setTimeout(10000);
-    const response = await api.get('/api/blogs');
+  await api.post('/api/blogs').send(payload).expect(201);
 
-    response.body.forEach((element) => {
-      expect(element.id).toBeDefined();
-    });
-  });
+  const response = await api.get('/api/blogs');
 
-  test('can be created', async () => {
-    jest.setTimeout(10000);
+  const blogs = response.body;
+  const lastBlog = blogs[blogs.length - 1];
+  delete lastBlog.id;
 
-    const payload = {
-      title: 'Why does my back hurt?',
-      author: 'Mama',
-      url: 'url.com',
-      likes: 4129,
-    };
+  expect(blogs.length).toEqual(helper.initialBlogs.length + 1);
+  expect(payload).toEqual(lastBlog);
+});
 
-    await api.post('/api/blogs').send(payload).expect(201);
+test('if the likes property is missing from the request, it will default to the value 0.', async () => {
+  jest.setTimeout(10000);
 
-    const response = await api.get('/api/blogs');
+  const payload = {
+    title: 'Why does my back hurt?',
+    author: 'Mama',
+    url: 'url.com',
+  };
 
-    const blogs = response.body;
-    const lastBlog = blogs[blogs.length - 1];
-    delete lastBlog.id;
+  await api.post('/api/blogs').send(payload).expect(201);
 
-    expect(blogs.length).toEqual(helper.initialBlogs.length + 1);
-    expect(payload).toEqual(lastBlog);
-  });
+  const response = await api.get('/api/blogs');
+
+  const blogs = response.body;
+  const lastBlog = blogs[blogs.length - 1];
+
+  expect(lastBlog.likes).toBeDefined();
+  expect(lastBlog.likes).toEqual(0);
 });
 
 afterAll(() => {
