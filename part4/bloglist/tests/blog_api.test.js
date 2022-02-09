@@ -29,6 +29,14 @@ describe('blogs', () => {
 
     expect(response.body.length).toEqual(2);
   });
+
+  test('have identifier property named "id"', async () => {
+    const response = await api.get('/api/blogs');
+
+    response.body.forEach((element) => {
+      expect(element.id).toBeDefined();
+    });
+  });
 });
 
 afterAll(() => {
