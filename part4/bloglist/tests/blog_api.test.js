@@ -17,7 +17,6 @@ beforeEach(async () => {
 });
 
 test('blogs are returned as json', async () => {
-  jest.setTimeout(10000);
   await api
     .get('/api/blogs')
     .expect(200)
@@ -25,14 +24,12 @@ test('blogs are returned as json', async () => {
 });
 
 test('blogs are correct amount', async () => {
-  jest.setTimeout(10000);
   const response = await api.get('/api/blogs');
 
   expect(response.body.length).toEqual(2);
 });
 
 test('blogs have identifier property named "id"', async () => {
-  jest.setTimeout(10000);
   const response = await api.get('/api/blogs');
 
   response.body.forEach((element) => {
@@ -41,8 +38,6 @@ test('blogs have identifier property named "id"', async () => {
 });
 
 test('blogs can be created', async () => {
-  jest.setTimeout(10000);
-
   const payload = {
     title: 'Why does my back hurt?',
     author: 'Mama',
@@ -63,8 +58,6 @@ test('blogs can be created', async () => {
 });
 
 test('if the likes property is missing from the request, it will default to the value 0.', async () => {
-  jest.setTimeout(10000);
-
   const payload = {
     title: 'Why does my back hurt?',
     author: 'Mama',
@@ -80,6 +73,15 @@ test('if the likes property is missing from the request, it will default to the 
 
   expect(lastBlog.likes).toBeDefined();
   expect(lastBlog.likes).toEqual(0);
+});
+
+test('if the title and url properties are missing from the request data, the backend responds to the request with the status code 400 Bad Request.', async () => {
+  const payload = {
+    author: 'Mama',
+    likes: 13,
+  };
+
+  await api.post('/api/blogs').send(payload).expect(400);
 });
 
 afterAll(() => {

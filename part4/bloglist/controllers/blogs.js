@@ -13,6 +13,10 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   //if likes is not defined, define it and set it to 0
+  if (request.body.title === undefined && request.body.url === undefined) {
+    response.status(400).send();
+  }
+
   const body = request.body.likes
     ? request.body
     : { ...request.body, likes: 0 };
