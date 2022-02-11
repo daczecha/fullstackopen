@@ -8,21 +8,11 @@ const blogsRouter = require('express').Router();
 const app = require('../app');
 //models
 const Blog = require('../models/blog');
-const { findById } = require('../models/user');
 const User = require('../models/user');
-
-//Get token
-const getToken = (request) => {
-  const authorization = request.headers.authorization;
-
-  if (authorization && authorization.toLowerCase().startsWith('bearer '))
-    return authorization.substring(7);
-  return null;
-};
 
 //Verify token
 const verifyToken = (request, response, next) => {
-  const token = getToken(request);
+  const token = request.token;
 
   if (!token)
     return response.status(401).json({ error: 'You are not authenticated!' });
