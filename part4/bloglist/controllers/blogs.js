@@ -50,7 +50,7 @@ blogsRouter.post('/', verifyToken, async (request, response) => {
   const savedBlog = await blog.save();
 
   await User.findById(user.id).then((doc) => {
-    doc.blogs.push(savedBlog.id);
+    doc.blogs.push(savedBlog.id.toString());
     doc.save();
   });
 
@@ -70,8 +70,19 @@ blogsRouter.put('/:id', async (request, response) => {
   response.json(result);
 });
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', verifyToken, async (request, response) => {
+  const user = await User.findById(request.user.id);
+  const blog = await Blog.findById(request.params.id);
+  const canDelete =
+    blog.user.toString() === request.user.id.toString() ? true : false;
+  if (!canDelete) {
+    return response
+      .status(401)
+      .json({ error: 'you have no permission to delete this blog' });
+  }
   const blogs = await Blog.findByIdAndDelete(request.params.id);
+  user.blogs = user.blogs.filter((e) => e !== blog.id.toString());
+  user.save();
   response.status(204).json(blogs);
 });
 
