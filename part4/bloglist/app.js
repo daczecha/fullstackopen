@@ -12,6 +12,7 @@ const middleware = require('./utils/middleware');
 //controllers
 const blogsRouter = require('./controllers/blogs');
 const usersRouter = require('./controllers/users');
+const loginRouter = require('./controllers/login');
 
 const app = express();
 
@@ -32,5 +33,6 @@ app.use(bodyParser.json());
 
 app.use('/api/blogs', blogsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/login', loginRouter);
 
 module.exports = app;
