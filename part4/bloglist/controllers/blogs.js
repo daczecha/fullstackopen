@@ -14,22 +14,24 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   if (request.body.title === undefined || request.body.url === undefined) {
-    response.status(400).json({ error: 'bad request' });
-  } else {
-    //if likes is not defined, define it and set it to 0
-    const body = request.body.likes
-      ? request.body
-      : { ...request.body, likes: 0 };
-
-    const user = await User.findOne({});
-    body.user = user.id;
-
-    const blog = new Blog(body);
-    const savedBlog = await blog.save();
-    user.blogs = user.blogs.concat(savedBlog.id);
-    await user.save();
-    response.status(201).json(savedBlog);
+    return response.status(400).json({ error: 'bad request' });
   }
+  const body = request.body;
+  const user = await User.findOne({});
+
+  const blog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes ? body.likes : 0,
+    user: user.id,
+  });
+
+  const savedBlog = await blog.save();
+
+  user.blogs = user.blogs.concat(savedBlog.id);
+  await user.save();
+  response.status(201).json(savedBlog);
 });
 
 blogsRouter.put('/:id', async (request, response) => {
