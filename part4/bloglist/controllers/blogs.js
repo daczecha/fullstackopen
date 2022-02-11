@@ -1,23 +1,53 @@
 require('express-async-errors');
 
+const jwt = require('jsonwebtoken');
+
 //create router
 const blogsRouter = require('express').Router();
 
+const app = require('../app');
 //models
 const Blog = require('../models/blog');
+const { findById } = require('../models/user');
 const User = require('../models/user');
+
+//Get token
+const getToken = (request) => {
+  const authorization = request.headers.authorization;
+
+  if (authorization && authorization.toLowerCase().startsWith('bearer '))
+    return authorization.substring(7);
+  return null;
+};
+
+//Verify token
+const verifyToken = (request, response, next) => {
+  const token = getToken(request);
+
+  if (!token)
+    return response.status(401).json({ error: 'You are not authenticated!' });
+
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
+    if (err) return response.status(401).json({ error: 'Invalid Token!' });
+
+    request.user = decoded;
+    next();
+  });
+};
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { blogs: 0 });
   response.json(blogs);
 });
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', verifyToken, async (request, response) => {
   if (request.body.title === undefined || request.body.url === undefined) {
     return response.status(400).json({ error: 'bad request' });
   }
+
   const body = request.body;
-  const user = await User.findOne({});
+  const user = request.user;
+  if (!user) return response.status(401).json({ error: 'invalid user' });
 
   const blog = new Blog({
     title: body.title,
@@ -29,8 +59,11 @@ blogsRouter.post('/', async (request, response) => {
 
   const savedBlog = await blog.save();
 
-  user.blogs = user.blogs.concat(savedBlog.id);
-  await user.save();
+  await User.findById(user.id).then((doc) => {
+    doc.blogs.push(savedBlog.id);
+    doc.save();
+  });
+
   response.status(201).json(savedBlog);
 });
 
