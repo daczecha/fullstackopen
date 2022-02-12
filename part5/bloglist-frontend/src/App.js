@@ -6,7 +6,13 @@ const App = () => {
   const [user, setUser] = useState(window.localStorage.getItem('user'));
 
   return (
-    <div>{user ? <Blogs user={user} /> : <Login setUser={setUser} />}</div>
+    <div>
+      {user ? (
+        <Blogs user={user} setUser={setUser} />
+      ) : (
+        <Login setUser={setUser} />
+      )}
+    </div>
   );
 };
 

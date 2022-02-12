@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Blogs = ({ user }) => {
+const Blogs = ({ user, setUser }) => {
   const [blogs, setBlogs] = useState([]);
 
   const getBlogs = async () => {
@@ -21,6 +21,14 @@ const Blogs = ({ user }) => {
     <div>
       <h1>blogs</h1>
       <p>{user.name} logged in</p>
+      <button
+        onClick={() => {
+          window.localStorage.removeItem('user');
+          setUser(null);
+        }}
+      >
+        logout
+      </button>
 
       <div>{renderedBlogs}</div>
     </div>
