@@ -3,9 +3,15 @@ import axios from 'axios';
 
 const Blogs = ({ user, setUser }) => {
   const [blogs, setBlogs] = useState([]);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+  const [title, setTitle] = useState(undefined);
+  const [author, setAuthor] = useState(undefined);
+  const [url, setUrl] = useState(undefined);
+
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const getBlogs = async () => {
     const response = await axios.get('http://localhost:3003/api/blogs');
@@ -27,13 +33,27 @@ const Blogs = ({ user, setUser }) => {
         },
         { headers: { authorization: 'Bearer ' + user.token } }
       );
+      setSuccess(true);
+      setSuccessMessage(`successfully added ${title} by ${author}`);
+      setError(false);
+
       setTitle('');
       setAuthor('');
       setUrl('');
+
       getBlogs();
     } catch (exception) {
-      throw Error(exception);
+      setSuccess(false);
+      setError(true);
+      setErrorMessage('bad request');
     }
+
+    setTimeout(() => {
+      setError(false);
+      setSuccess(false);
+      setSuccessMessage('');
+      setErrorMessage('');
+    }, 2000);
   };
 
   const renderedBlogs = blogs.map((blog) => (
@@ -45,6 +65,9 @@ const Blogs = ({ user, setUser }) => {
   return (
     <div>
       <h1>blogs</h1>
+      {success ? <div className="success">{successMessage}</div> : null}
+      {error ? <div className="error">{errorMessage}</div> : null}
+
       <p>{user.name} logged in</p>
       <button
         onClick={() => {
@@ -65,6 +88,7 @@ const Blogs = ({ user, setUser }) => {
             onChange={({ target }) => setTitle(target.value)}
             value={title}
           ></input>
+          <br />
           <label htmlFor="author">author</label>
           <input
             type="text"
@@ -72,6 +96,8 @@ const Blogs = ({ user, setUser }) => {
             onChange={({ target }) => setAuthor(target.value)}
             value={author}
           ></input>
+          <br />
+
           <label htmlFor="url">url</label>
           <input
             type="text"
@@ -79,7 +105,8 @@ const Blogs = ({ user, setUser }) => {
             onChange={({ target }) => setUrl(target.value)}
             value={url}
           ></input>
-          <button type="submit">login</button>
+          <br />
+          <button type="submit">create</button>
         </form>
       </div>
 
