@@ -3,7 +3,9 @@ import Blogs from './components/Blogs';
 import Login from './components/Login';
 
 const App = () => {
-  const [user, setUser] = useState(window.localStorage.getItem('user'));
+  const [user, setUser] = useState(
+    JSON.parse(window.localStorage.getItem('user'))
+  );
 
   return (
     <div>
