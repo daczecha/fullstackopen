@@ -12,7 +12,7 @@ const Blogs = ({ user }) => {
   useEffect(() => getBlogs(), []);
 
   const renderedBlogs = blogs.map((blog) => (
-    <p>
+    <p key={blog.id}>
       {blog.title} {blog.author}
     </p>
   ));

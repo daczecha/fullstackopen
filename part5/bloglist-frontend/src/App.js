@@ -3,7 +3,7 @@ import Blogs from './components/Blogs';
 import Login from './components/Login';
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(window.localStorage.getItem('user'));
 
   return (
     <div>{user ? <Blogs user={user} /> : <Login setUser={setUser} />}</div>

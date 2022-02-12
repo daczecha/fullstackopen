@@ -13,6 +13,7 @@ const Login = ({ setUser }) => {
         username,
         password,
       });
+      window.localStorage.setItem('user', JSON.stringify(response.data));
       setUser(response.data);
       setUserName('');
       setPassword('');
