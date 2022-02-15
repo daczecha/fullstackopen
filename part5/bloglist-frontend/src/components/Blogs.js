@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import BlogForm from './BlogForm';
+import BlogPost from './BlogPost';
 import Togglable from './Toggleable';
 
 const Blogs = ({
@@ -13,15 +14,13 @@ const Blogs = ({
 }) => {
   const toggleRef = useRef();
 
-  const renderedBlogs = blogs.map((blog) => (
-    <p key={blog.id}>
-      {blog.title} {blog.author}
-    </p>
+  const renderedBlogs = blogs.map((elem) => (
+    <BlogPost key={elem.id} data={elem} />
   ));
 
   return (
     <div>
-      <Togglable buttonLabel="create" ref={toggleRef}>
+      <Togglable buttonLabel="create new blog" ref={toggleRef}>
         <BlogForm
           user={user}
           setBlogs={setBlogs}
