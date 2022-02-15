@@ -9,6 +9,7 @@ const BlogForm = ({
   setError,
   setErrorMessage,
   user,
+  toggleRef,
 }) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -16,6 +17,7 @@ const BlogForm = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    toggleRef.current.toggleVisibility();
     try {
       const response = await axios.post(
         'http://localhost:3003/api/blogs',

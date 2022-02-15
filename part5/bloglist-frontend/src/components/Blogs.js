@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import BlogForm from './BlogForm';
 import Togglable from './Toggleable';
 
@@ -11,6 +11,8 @@ const Blogs = ({
   setSuccess,
   setSuccessMessage,
 }) => {
+  const toggleRef = useRef();
+
   const renderedBlogs = blogs.map((blog) => (
     <p key={blog.id}>
       {blog.title} {blog.author}
@@ -19,7 +21,7 @@ const Blogs = ({
 
   return (
     <div>
-      <Togglable buttonLabel="create">
+      <Togglable buttonLabel="create" ref={toggleRef}>
         <BlogForm
           user={user}
           setBlogs={setBlogs}
@@ -28,6 +30,7 @@ const Blogs = ({
           setSuccess={setSuccess}
           setSuccessMessage={setSuccessMessage}
           blogs={blogs}
+          toggleRef={toggleRef}
         ></BlogForm>
       </Togglable>
       <div>{renderedBlogs}</div>
