@@ -14,7 +14,9 @@ const Blogs = ({
 }) => {
   const toggleRef = useRef();
 
-  const renderedBlogs = blogs.map((elem) => (
+  const sortedBlogs = blogs.sort((a, b) => (a.likes > b.likes ? -1 : 1));
+
+  const renderedBlogs = sortedBlogs.map((elem) => (
     <BlogPost key={elem.id} data={elem} />
   ));
 
