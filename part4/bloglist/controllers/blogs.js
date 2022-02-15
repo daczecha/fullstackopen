@@ -31,7 +31,14 @@ blogsRouter.get('/', async (request, response) => {
 });
 
 blogsRouter.post('/', verifyToken, async (request, response) => {
-  if (request.body.title === undefined || request.body.url === undefined) {
+  if (
+    !(
+      typeof request.body.title === 'string' &&
+      request.body.title.length > 0 &&
+      typeof request.body.url === 'string' &&
+      request.body.url.length > 0
+    )
+  ) {
     return response.status(400).json({ error: 'bad request' });
   }
 
@@ -49,10 +56,9 @@ blogsRouter.post('/', verifyToken, async (request, response) => {
 
   const savedBlog = await blog.save();
 
-  await User.findById(user.id).then((doc) => {
-    doc.blogs.push(savedBlog.id.toString());
-    doc.save();
-  });
+  const userDoc = await User.findById(user.id);
+  userDoc.blogs = userDoc.blogs.concat(savedBlog.id.toString());
+  userDoc.save();
 
   response.status(201).json(savedBlog);
 });
@@ -84,6 +90,14 @@ blogsRouter.delete('/:id', verifyToken, async (request, response) => {
   user.blogs = user.blogs.filter((e) => e !== blog.id.toString());
   user.save();
   response.status(204).json(blogs);
+});
+
+blogsRouter.put('/:id', async (request, response) => {
+  const blog = await Blog.findByIdAndUpdate(request.params.id, request.body);
+  if (!blog) {
+    return response.status(404).json({ error: 'blog not found' });
+  }
+  return response.status(200).json(blog);
 });
 
 module.exports = blogsRouter;

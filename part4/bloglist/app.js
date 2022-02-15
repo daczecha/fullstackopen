@@ -41,10 +41,14 @@ app.use('/api/blogs', blogsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
 
-app.get('/clear', async (req, res) => {
+app.get('/clear/users', async (req, res) => {
   await User.deleteMany({});
+  res.send('cleared users');
+});
+
+app.get('/clear/blogs', async (req, res) => {
   await Blog.deleteMany({});
-  res.send('cleared');
+  res.send('cleared blogs');
 });
 
 module.exports = app;

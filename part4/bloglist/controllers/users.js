@@ -23,9 +23,14 @@ usersRouter.post('/', async (request, response) => {
   });
 
   console.log(user);
-  const savedUser = await user.save();
-
-  response.json(savedUser);
+  try {
+    const savedUser = await user.save();
+    response.json(savedUser);
+  } catch (exception) {
+    if (exception.message.includes('E11000 duplicate key error collection:')) {
+      response.status(400).json({ error: 'name must be unique' });
+    }
+  }
 });
 
 usersRouter.get('/', async (request, response) => {
