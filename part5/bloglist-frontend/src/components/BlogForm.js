@@ -19,7 +19,7 @@ const BlogForm = ({
     event.preventDefault();
     toggleRef.current.toggleVisibility();
     try {
-      const response = await axios.post(
+      await axios.post(
         'http://localhost:3003/api/blogs',
         {
           title,
@@ -29,7 +29,8 @@ const BlogForm = ({
         { headers: { authorization: 'Bearer ' + user.token } }
       );
 
-      setBlogs([...blogs, response.data]);
+      const response = await axios.get('http://localhost:3003/api/blogs');
+      setBlogs(response.data);
       setSuccessMessage(`successfully added ${title} by ${author}`);
       setSuccess(true);
 

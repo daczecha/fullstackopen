@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 
-const BlogPost = ({ data }) => {
+const BlogPost = ({ data, user, blogs, setBlogs }) => {
   const [details, setDetails] = useState(false);
   const [buttonLabel, setButtonLabel] = useState('view');
   const showDetails = { display: details ? '' : 'none' };
@@ -22,10 +22,20 @@ const BlogPost = ({ data }) => {
     setLikes(likes + 1);
   };
 
+  const removeBlogPost = async () => {
+    if (window.confirm(`Remove ${data.title} by ${data.author}?`)) {
+      await axios.delete(`http://localhost:3003/api/blogs/${data.id}`, {
+        headers: { authorization: 'Bearer ' + user.token },
+      });
+      const filteredBlogs = blogs.filter((elem) => elem.id !== data.id);
+      setBlogs(filteredBlogs);
+    }
+  };
+
   return (
     <div className="blog">
       <p>
-        {data.title} {data.author}
+        {data.title} by {data.author}
         <button onClick={toggleDetails}>{buttonLabel}</button>
       </p>
       <div style={showDetails}>
@@ -35,6 +45,9 @@ const BlogPost = ({ data }) => {
           <button onClick={likeBlogPost}>like</button>
         </p>
         <p>{data.user.name}</p>
+        {user.username === data.user.username ? (
+          <button onClick={removeBlogPost}>remove</button>
+        ) : null}
       </div>
     </div>
   );

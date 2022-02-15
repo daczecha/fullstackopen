@@ -1,27 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Blogs from './components/Blogs';
 import Login from './components/Login';
-import axios from 'axios';
 
 const App = () => {
   const [user, setUser] = useState(
     JSON.parse(window.localStorage.getItem('user'))
   );
 
-  const [blogs, setBlogs] = useState([]);
-
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
-  const getBlogs = async () => {
-    const response = await axios.get('http://localhost:3003/api/blogs');
-    setBlogs(response.data);
-  };
-
-  useEffect(() => getBlogs(), []);
 
   return (
     <div>
@@ -42,8 +32,6 @@ const App = () => {
         <Blogs
           user={user}
           setUser={setUser}
-          blogs={blogs}
-          setBlogs={setBlogs}
           setError={setError}
           setErrorMessage={setErrorMessage}
           setSuccessMessage={setSuccessMessage}

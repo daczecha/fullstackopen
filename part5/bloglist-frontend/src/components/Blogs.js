@@ -1,23 +1,37 @@
-import React, { useRef } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect, useRef } from 'react';
 import BlogForm from './BlogForm';
 import BlogPost from './BlogPost';
 import Togglable from './Toggleable';
 
 const Blogs = ({
-  blogs,
   user,
-  setBlogs,
   setError,
   setErrorMessage,
   setSuccess,
   setSuccessMessage,
 }) => {
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    (async function () {
+      const response = await axios.get('http://localhost:3003/api/blogs');
+      setBlogs(response.data);
+    })();
+  }, []);
+
   const toggleRef = useRef();
 
   const sortedBlogs = blogs.sort((a, b) => (a.likes > b.likes ? -1 : 1));
 
   const renderedBlogs = sortedBlogs.map((elem) => (
-    <BlogPost key={elem.id} data={elem} />
+    <BlogPost
+      key={elem.id}
+      setBlogs={setBlogs}
+      blogs={blogs}
+      user={user}
+      data={elem}
+    />
   ));
 
   return (
