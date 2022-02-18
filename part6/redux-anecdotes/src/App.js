@@ -18,8 +18,8 @@ function App() {
   return (
     <div className="app">
       <h2>Anecdotes</h2>
-      <Notification />
       <Filter />
+      <Notification />
       <AnecdoteList />
       <AnecdoteForm />
     </div>
