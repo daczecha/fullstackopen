@@ -10,6 +10,7 @@ const Notification = () => {
     setTimeout(() => {
       dispatch(removeNotification());
     }, 5000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const style = {
